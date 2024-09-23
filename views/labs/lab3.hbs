@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Лабораторна робота №3</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-container {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      #feedbackForm {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      header {
+        background-color: #4caf50;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      nav {
+        background-color: #333;
+        padding: 1rem;
+      }
+
+      nav ul {
+        display: flex;
+        justify-content: space-around;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+      }
+
+      nav ul li a:hover {
+        color: #f1f1f1;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+        margin-top: auto;
+      }
+
+      .container {
+        display: flex;
+        flex: 1;
+        padding: 1rem;
+      }
+
+      .sidebar {
+        background-color: #f4f4f4;
+        padding: 1rem;
+        width: 25%;
+      }
+
+      .main-content {
+        background-color: #fff;
+        padding: 1rem;
+        flex-grow: 1;
+        margin-left: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+
+        nav ul {
+          flex-direction: column;
+        }
+
+        nav ul li {
+          margin-bottom: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/">На головну</a>
+    
+    <header>
+      <h1>Верхній колонтитул</h1>
+    </header>
+
+    <nav>
+      <ul>
+        <li>
+          <a href="#">Головна</a>
+        </li>
+        <li>
+          <a href="#">Про нас</a>
+        </li>
+        <li>
+          <a href="#">Ціни</a>
+        </li>
+        <li>
+          <a href="#">Блог</a>
+        </li>
+        <li>
+          <a href="#">Контакти</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <aside class="sidebar">
+        <h2>Бокова колонка</h2>
+        <p>Тут може бути меню або додаткова інформація.</p>
+      </aside>
+
+      <main class="main-content">
+        <h2>Основний вміст</h2>
+        <p>
+          Це основна частина сторінки, де розташовується контент. Сюди можна
+          додавати текст, зображення, відео та інші елементи.
+        </p>
+      </main>
+    </div>
+
+    <footer>
+      <p>Нижній колонтитул &copy; 2024</p>
+    </footer>
+
+    {{> feedbacks}}
+    {{> footer}}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.querySelector('input[name="name"]');
+        const emailInput = document.querySelector('input[name="email"]');
+        const textArea = document.querySelector('textarea[name="text"]');
+
+        if (sessionStorage.getItem('name')) {
+          nameInput.value = sessionStorage.getItem('name');
+        }
+        if (sessionStorage.getItem('email')) {
+          emailInput.value = sessionStorage.getItem('email');
+        }
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData.entries());
+          data.page = window.location.pathname; // Додаємо шлях сторінки
+
+          console.log(window.location.pathname)
+
+          sessionStorage.setItem('name', data.name);
+          sessionStorage.setItem('email', data.email);
+
+          fetch('http://localhost:3000/feedbacks', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+          .then(response => response.json())
+          .then(newFeedback => {
+            const feedbackList = document.getElementById('feedbackList');
+            const newListItem = document.createElement('li');
+            newListItem.textContent = `${newFeedback.name}: ${newFeedback.text}`;
+            feedbackList.appendChild(newListItem);
+            textArea.value = '';
+          })
+          .catch((error) => {
+            console.error('Помилка:', error);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

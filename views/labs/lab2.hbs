@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Лабораторна робота №2</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-container {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      #feedbackForm {
+        display: flex;
+        flex-direction: column;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+      }
+
+      .laboratory {
+        color: dodgerblue;
+      }
+
+      .lecture {
+        color: goldenrod;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/">На головну</a>
+    <h1>Список продуктів</h1>
+    <ol>
+      <li style="text-decoration: line-through">Хліб</li>
+      <li>Морква</li>
+      <li>Вода</li>
+      <li style="text-decoration: line-through">Сіль</li>
+      <li>Перець</li>
+    </ol>
+    <hr />
+    <h1>Розклад уроків (п'ятниця)</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>№</th>
+          <th>Час</th>
+          <th>Предмет</th>
+          <th>Тип уроку</th>
+          <th>Викладач</th>
+          <th>Аудиторія</th>
+          <th>Підгрупа</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">1</td>
+          <td rowspan="2">08:15-09:00</td>
+          <td class="subject">Операційні системи та мобільні платформи</td>
+          <td class="laboratory">Лабораторна робота</td>
+          <td>І.П.Малініч</td>
+          <td>7204(1)</td>
+          <td>1 підгрупа</td>
+        </tr>
+        <tr>
+          <td>Комп'ютерні мережі та хмарні технології</td>
+          <td class="laboratory">Лабораторна робота</td>
+          <td>І.Р.Арсенюк</td>
+          <td>5301</td>
+          <td>2 підгрупа</td>
+        </tr>
+        <tr>
+          <td rowspan="2">2</td>
+          <td rowspan="2">09:15-10:00</td>
+          <td>Операційні системи та мобільні платформи</td>
+          <td class="laboratory">Лабораторна робота</td>
+          <td>І.П.Малініч</td>
+          <td>7204(1)</td>
+          <td>1 підгрупа</td>
+        </tr>
+        <tr>
+          <td>Комп'ютерні мережі та хмарні технології</td>
+          <td class="laboratory">Лабораторна робота</td>
+          <td>І.Р.Арсенюк</td>
+          <td>5301</td>
+          <td>2 підгрупа</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>10:15-11:00</td>
+          <td>Комп'ютерні мережі та хмарні технології</td>
+          <td class="lecture">Лекція</td>
+          <td>І.Р.Арсенюк</td>
+          <td>5122</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>11:15-12:00</td>
+          <td>Комп'ютерні мережі та хмарні технології</td>
+          <td class="lecture">Лекція</td>
+          <td>І.Р.Арсенюк</td>
+          <td>5122</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>12:15-13:00</td>
+          <td>Операційні системи та мобільні платформи</td>
+          <td class="lecture">Лекція</td>
+          <td>О.В.Сілагін</td>
+          <td>5122</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>13:15-14:00</td>
+          <td>Web-технології</td>
+          <td class="lecture">Лекція</td>
+          <td>О.В.Сілагін</td>
+          <td>5122</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr />
+    <h1 style="text-align: center">Медіа</h1>
+    <div
+      style="display: flex; justify-content: space-between; align-items: center"
+    >
+      <img
+        src="https://images.pexels.com/photos/1276553/pexels-photo-1276553.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        alt="Cute cat"
+        width="50%"
+        height="50%"
+      />
+      <iframe
+        width="727"
+        height="485"
+        src="https://www.youtube.com/embed/AxE4TltnvjI?si=ub9gYBrtGb9WzMr2"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+        style="padding-left: 10px"
+      ></iframe>
+    </div>
+    {{> feedbacks}}
+    {{> footer}}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.querySelector('input[name="name"]');
+        const emailInput = document.querySelector('input[name="email"]');
+        const textArea = document.querySelector('textarea[name="text"]');
+
+        if (sessionStorage.getItem('name')) {
+          nameInput.value = sessionStorage.getItem('name');
+        }
+        if (sessionStorage.getItem('email')) {
+          emailInput.value = sessionStorage.getItem('email');
+        }
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData.entries());
+          data.page = window.location.pathname; // Додаємо шлях сторінки
+
+          console.log(window.location.pathname)
+
+          sessionStorage.setItem('name', data.name);
+          sessionStorage.setItem('email', data.email);
+
+          fetch('http://localhost:3000/feedbacks', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+          .then(response => response.json())
+          .then(newFeedback => {
+            const feedbackList = document.getElementById('feedbackList');
+            const newListItem = document.createElement('li');
+            newListItem.textContent = `${newFeedback.name}: ${newFeedback.text}`;
+            feedbackList.appendChild(newListItem);
+            textArea.value = '';
+          })
+          .catch((error) => {
+            console.error('Помилка:', error);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

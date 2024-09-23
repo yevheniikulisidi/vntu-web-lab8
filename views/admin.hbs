@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Панель адміна</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Відгуки</h1>
+  <table id="feedbackTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Сторінка</th>
+        <th>Ім'я</th>
+        <th>Email</th>
+        <th>Текст</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Дані будуть додані динамічно тут -->
+    </tbody>
+  </table>
+  <p id="feedbackCount"></p>
+
+  <script>
+    async function fetchFeedbacks() {
+      try {
+        const response = await fetch('http://localhost:3000/feedbacks-data');
+        const data = await response.json();
+
+        const feedbacks = data.feedbacks;
+        const count = data.count;
+
+        const tableBody = document.querySelector('#feedbackTable tbody');
+        tableBody.innerHTML = '';
+
+        feedbacks.forEach(feedback => {
+          const row = document.createElement('tr');
+          
+          row.innerHTML = `
+            <td>${feedback.id}</td>
+            <td>${feedback.page}</td>
+            <td>${feedback.name}</td>
+            <td>${feedback.email}</td>
+            <td>${feedback.text}</td>
+          `;
+          
+          tableBody.appendChild(row);
+        });
+
+        document.getElementById('feedbackCount').textContent = `Кількість відгуків: ${count}`;
+      } catch (error) {
+        console.error('Помилка при отриманні даних:', error);
+      }
+    }
+
+    window.onload = fetchFeedbacks;
+  </script>
+</body>
+</html>

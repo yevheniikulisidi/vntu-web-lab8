@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang='uk'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Відгуки</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-container {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      #feedbackForm {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/">На головну</a>
+
+    {{> feedbacks}}
+
+    {{> footer}}
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.querySelector('input[name="name"]');
+        const emailInput = document.querySelector('input[name="email"]');
+        const textArea = document.querySelector('textarea[name="text"]');
+
+        if (sessionStorage.getItem('name')) {
+          nameInput.value = sessionStorage.getItem('name');
+        }
+        if (sessionStorage.getItem('email')) {
+          emailInput.value = sessionStorage.getItem('email');
+        }
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData.entries());
+          data.page = window.location.pathname; // Додаємо шлях сторінки
+
+          console.log(window.location.pathname)
+
+          sessionStorage.setItem('name', data.name);
+          sessionStorage.setItem('email', data.email);
+
+          fetch('http://localhost:3000/feedbacks', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+          .then(response => response.json())
+          .then(newFeedback => {
+            const feedbackList = document.getElementById('feedbackList');
+            const newListItem = document.createElement('li');
+            newListItem.textContent = `${newFeedback.name}: ${newFeedback.text}`;
+            feedbackList.appendChild(newListItem);
+            textArea.value = '';
+          })
+          .catch((error) => {
+            console.error('Помилка:', error);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

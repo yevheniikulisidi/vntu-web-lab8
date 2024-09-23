@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Користувачі</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Користувачі</h1>
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Користувач</th>
+        <th>Пароль</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Дані будуть додані динамічно тут -->
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchUsers() {
+      try {
+        const response = await fetch('http://localhost:3000/users-data');
+        const usersData = await response.json();
+
+        const tableBody = document.querySelector('#userTable tbody');
+        tableBody.innerHTML = '';
+
+        usersData.forEach(user => {
+          const row = document.createElement('tr');
+          
+          row.innerHTML = `
+            <td>${user.user}</td>
+            <td>${user.pass}</td>
+          `;
+          
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Помилка при отриманні даних:', error);
+      }
+    }
+
+    window.onload = fetchUsers;
+  </script>
+</body>
+</html>

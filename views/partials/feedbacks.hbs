@@ -1,0 +1,17 @@
+<div>
+  <h1>Відгуки</h1>
+  <ul id='feedbackList'>
+    {{#each feedbacks}}
+      <li>{{this.name}}: {{this.text}}</li>
+    {{/each}}
+  </ul>
+
+  <div class='form-container'>
+    <form id='feedbackForm'>
+      <input type='text' name='name' placeholder="Ваше ім'я" required />
+      <input type='email' name='email' placeholder='Ваша ел. пошта' required />
+      <textarea name='text' placeholder='Ваш відгук...' required></textarea>
+      <button type='submit'>Додати відгук</button>
+    </form>
+  </div>
+</div>
